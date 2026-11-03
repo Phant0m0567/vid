@@ -218,10 +218,22 @@
 
   ]]></style>
 
+  #root { position:relative; }
+
+  #particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height:100%;
+  z-index; 0
+  pointer-events: none;
+
   <foreignObject x="0" y="0" width="100%" height="100%">
     <div xmlns="http://www.w3.org/1999/xhtml" id="root">
-
+   
   <div id="gate">
+  <canvas id="particles"></canvas>  
+    
     <p>Pick your username to start</p>
     <div id="gate-row">
       <input type="text" id="name-input" placeholder="Username" maxlength="20" autocomplete="off" autofocus="autofocus" />
@@ -317,8 +329,8 @@
       const code = (err && (err.code || err.message)) || 'unknown';
       statusEl.textContent =
         /api-key/i.test(code) ? 'Add your Firebase apiKey in the initializeApp config.' :
-        /operation-not-allowed|admin-restricted/i.test(code) ? 'Turn on Anonymous sign-in in Firebase console > Authentication > Sign-in method.' :
-        /permission/i.test(code) ? 'Firebase blocked this (permission denied). Check you are signed in and the path matches your rules.' :
+        /operation-not-allowed|admin-restricted/i.test(code) ? 'Turn on Anonymous sign-in in Firebase console > Authentication > Sign-in method like a good boy.' :
+        /permission/i.test(code) ? 'Firebase blocked this (permission denied). Check you are signed in and the path matches your rules retard.' :
         'Firebase error: ' + code;
       console.error('Firebase error:', err);
     }
@@ -435,6 +447,74 @@
     input.addEventListener('keydown', e => {
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
     });
-  
-  ]]></script>
+  input.addEventListener('keydown',e=>{
+
+     if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}
+    ));
+    (function () {\
+     cont root= document.getElementById('root');
+    const canvas=document.getElementById('particles');
+    const ctx=canvas.getContext('2d');
+
+
+    const COUNT =70;
+    const COLOR='255,255,255';
+    const LINK_DIST=110;
+    let w=0,h=0,particles=[];
+
+
+  function resizeCanvas() {
+    w=canvas.width=root.clientWidth;
+    h=canvas.height=root.clientHeight;
+    }
+
+    function init() {
+    resizeCanvas();
+    particles=Array.from({lenght: COUNT ), ()=> ({
+    x: Math.random() * w,
+    y: Math.random() * h,
+    vx: (Math.random() - 0.5) * 0,4,
+    Vy: (Math.random() - 0.5) * 0.4,
+    r: Math.random() * 1.8 + 0.6
+    }));
+    }
+
+    functtion frame() {
+    ctx.clearRect(0,0,w,h);
+
+    for(const p of particles) {
+    p.x +=p.vx; p.y +=p.vy;
+    if (p.x < 0) p.x = w; else if (p.x > w) p.x = 0;
+    if (p.y < 0) p.y - h; else if (p.y > h) p.y = 0;
+
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI * 2);
+    ctx.fillstyle = 'rgba(' + COLOR ,'0.6)';
+    ctx.fill();
+    }
+
+    if (LINK_DIST) {
+     for (let i=0; i < particles.length;i++) {
+     for (let j = i + 1; j < particles.length; j++) {
+     const a = particles[i], b=particles[i];
+    const d=Math.hypot(a.x-b.x,a.y-b.y);
+    if (d < LINK_DIST) {
+    ctx.strokeStyle ='rgba(' + COLOR +','+(0.15 * ( 1d/LINK_DIST))+')';
+    ctx.beginPath();
+    ctx.moveTo(a.x,a.y);
+    ctx.lineTo(b.x,b.y);
+    ctx.stroke();
+    }
+   }
+  }
+ }
+ requestAnimationFrame(frame);
+ }
+
+
+init();
+frame();
+new ResizeObserver(resizeCanvas).observer(root);
+})();
+]]></script>
 </svg>
